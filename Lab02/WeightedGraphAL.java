@@ -18,51 +18,67 @@ public class WeightedGraphAL {
         this.adjacencyList.get(node2).add(new Edge(node1, weight));
     }
 
-    void djikstra(String start, String end){
-        LinkedList<Node> visited = new LinkedList<>();
-        PriorityQueue<Node> waiting = new PriorityQueue<>();
+    public void djikstra(String start, String end) {
+        Map<String, Integer> distance = new HashMap<>();
+        Map<String, String> previousNode = new HashMap<>();
+        Map<String, Boolean> visited = new HashMap<>();
 
-
-        // Initialize distances
         for (String node : adjacencyList.keySet()) {
             distance.put(node, Integer.MAX_VALUE);
+            previousNode.put(node, null);
+            visited.put(node, false);
         }
+
         distance.put(start, 0);
-        waiting.add(new Node(start, 0));
-        path.add(start);
 
-        // Start loop
-        while (!waiting.isEmpty()) {
-            Node current = waiting.poll();
-            String currentNode = current.node;
-                        
-            // If the node is already visited, skip it
-            if (visited.contains(current)) {
-                continue;
+        for (int i = 0; i < adjacencyList.size(); i++) {
+
+            String current = null;
+            int minDistance = Integer.MAX_VALUE;
+
+            for (String node : adjacencyList.keySet()) {
+                if (!visited.get(node) && distance.get(node) < minDistance) {
+                    current = node;
+                    minDistance = distance.get(node);
+                }
             }
-            visited.add(current);
 
-            // If reached end
-            // if (currentNode.equals(end)){
-            //     String pathString = pathToString(path, end);
-            //     System.out.println("Shortest Path: " + pathString);
-            //     System.out.println("Total Distance: " + distance.get(end));
-            //     return;
-            // }
+            if (current == null) break;
 
-            // Explore
-            for (Edge edge : this.adjacencyList.get(currentNode)) {
-                String neighbor = edge.targetNode;
-                int newDist =  distance.get(current) + edge.weight;
+            visited.put(current, true);
 
-                if (newDist < distance.get(current)) {
-                    distance.put(neighbor, newDist);
-                    waiting.add(new Node(neighbor, newDist));
-                    path.add(currentNode);
+
+            for (Edge edge : adjacencyList.get(current)) {
+                if (!visited.get(edge.targetNode)) {
+                    int newDist = distance.get(current) + edge.weight;
+                    if (newDist < distance.get(edge.targetNode)) {
+                        distance.put(edge.targetNode, newDist);
+                        previousNode.put(edge.targetNode, current);
+                    }
                 }
             }
         }
+
+        String[] path = new String[adjacencyList.size()];
+        int index = 0;
+        String temp = end;
+
+        while (temp != null) {
+            path[index++] = temp;
+            temp = previousNode.get(temp);
+        }
+
+
+        String pathString = "";
+        for (int i = index - 1; i >= 0; i--) {
+            pathString += path[i];
+            if (i > 0) pathString += " --> ";
+        }
+
+        System.out.println("Path: " + pathString);
+        System.out.println("Shortest distance: " + distance.get(end));
     }
+
 
     @Override
     public String toString() {
