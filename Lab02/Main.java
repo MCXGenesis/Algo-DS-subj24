@@ -2,17 +2,20 @@
  * ES234319 - Algorithms and Data Structures
  * Computing Lab. Work
  * Coursework No.   : 02
- * Student ID       : 5026231107
- * Student Name     : Naufal Maula Nabil
- * Class            : C
+ * Student ID       : 502623>_<
+ * Student Name     : >_<
+ * Class            : >_<
  */
+
 
  import java.util.*;
 
  public class Main {
      public static void main(String[] args) {
-        //task1();
-        //task2();
+        task1();
+        System.out.println(">~~~~~<");
+        task2();
+       System.out.println(">~~~~~<");
         optionalTask();
      }
      
@@ -103,8 +106,7 @@
          System.out.println(graph);
          
          // Call the dijkstra method from graph
-         //graph.djikstra("A", "H");
+         graph.djikstra("A", "H");
      }
- 
  }
  
